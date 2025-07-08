@@ -12,11 +12,33 @@ export default class Transaction extends Model {
   @field('image_uri') imageUri
 
   get isValid() {
+    // Convert amount to number if it's a string
+    const amount = typeof this.amount === 'string' 
+      ? parseFloat(this.amount)
+      : this.amount
+
+    // Normalize date format
+    const normalizedDate = this.normalizeDate(this.date)
+
     return (
-      typeof this.amount === 'number' && 
+      !isNaN(amount) && 
       ['income', 'expense'].includes(this.type) &&
       typeof this.category === 'string' &&
-      !isNaN(new Date(this.date).getTime())
+      !isNaN(new Date(normalizedDate).getTime())
     )
+  }
+
+  normalizeDate(dateStr) {
+    if (!dateStr) return null
+    
+    // Handle various date formats
+    if (dateStr.includes('/')) {
+      const [year, month, day] = dateStr.split('/')
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+    } else if (dateStr.includes('-') && dateStr.split('-')[0].length === 2) {
+      const [day, month, year] = dateStr.split('-')
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+    }
+    return dateStr
   }
 }

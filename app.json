@@ -1,0 +1,11 @@
+{
+  "name": "accounting-app",
+  "displayName": "Accounting App",
+  "expo": {
+    "name": "accounting-app",
+    "slug": "accounting-app",
+    "version": "1.0.0",
+    "platforms": ["ios", "android", "web"],
+    "assetBundlePatterns": ["**/*"]
+  }
+}
